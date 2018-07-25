@@ -1,0 +1,7 @@
+[prune]
+  unused-packages = true
+  go-tests = true
+
+[[override]]
+  name = "github.com/pulumi/pulumi"
+  branch = "master"

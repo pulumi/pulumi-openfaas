@@ -1,0 +1,24 @@
+{
+    "name": "@pulumi/openfaas",
+    "version": "v0.14.1-dev-1530572194-g218d72d-dirty",
+    "description": "A Pulumi package for creating and managing OpenFaas resources.",
+    "license": "Apache 2.0",
+    "keywords": [
+        "pulumi",
+        "kubernetes"
+    ],
+    "homepage": "https://pulumi.io",
+    "repository": "https://github.com/pulumi/pulumi-openfaas",
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^0.14.0-rc1"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.2"
+    },
+    "pulumi": {
+        "resource": true
+    }
+}
