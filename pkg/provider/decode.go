@@ -224,7 +224,7 @@ func decodeProperty(path string, v resource.PropertyValue, dest reflect.Value) e
 			if err := decodeProperty(fmt.Sprintf("%v.%v", path, k), e, me); err != nil {
 				return err
 			}
-			m.SetMapIndex(reflect.ValueOf(k), me)
+			m.SetMapIndex(reflect.ValueOf(string(k)), me)
 		}
 		dest.Set(m)
 

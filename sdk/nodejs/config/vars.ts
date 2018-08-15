@@ -8,4 +8,4 @@ let __config = new pulumi.Config("openfaas");
 /**
  * The URL of the OpenFaaS API gateway.
  */
-export let endpoint: string = __config.require("endpoint");
+export let endpoint = __config.get("endpoint");
