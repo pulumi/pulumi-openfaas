@@ -21,8 +21,8 @@ export class Function extends pulumi.CustomResource {
     public readonly image: pulumi.Output<string>;
     public readonly envProcess: pulumi.Output<string>;
     public readonly envVars: pulumi.Output<{[key: string]: string}> | undefined;
-    public readonly labels: pulumi.Output<string[]> | undefined;
-    public readonly annotations: pulumi.Output<string[]> | undefined;
+    public readonly labels: pulumi.Output<{[key: string]: string}> | undefined;
+    public readonly annotations: pulumi.Output<{[key: string]: string}> | undefined;
     public readonly registryAuth: pulumi.Output<string> | undefined;
 
     /**
@@ -75,8 +75,8 @@ export interface FunctionState {
     readonly image?: pulumi.Input<string>;
     readonly envProcess?: pulumi.Input<string>;
     readonly envVars?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
-    readonly labels?: pulumi.Input<pulumi.Input<string>[]>;
-    readonly annotations?: pulumi.Input<pulumi.Input<string>[]>;
+    readonly labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    readonly annotations?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     readonly registryAuth?: pulumi.Input<string>;
 }
 
@@ -89,7 +89,7 @@ export interface FunctionArgs {
     readonly image: pulumi.Input<string>;
     readonly envProcess?: pulumi.Input<string>;
     readonly envVars?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
-    readonly labels?: pulumi.Input<pulumi.Input<string>[]>;
-    readonly annotations?: pulumi.Input<pulumi.Input<string>[]>;
+    readonly labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+    readonly annotations?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
     readonly registryAuth?: pulumi.Input<string>;
 }

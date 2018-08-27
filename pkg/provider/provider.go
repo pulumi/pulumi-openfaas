@@ -16,8 +16,10 @@ package provider
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/golang/glog"
 	pbempty "github.com/golang/protobuf/ptypes/empty"
@@ -87,7 +89,14 @@ func (p *faasProvider) Configure(_ context.Context, req *pulumirpc.ConfigureRequ
 
 	username, password := vars[faasNamespace+"username"], vars[faasNamespace+"password"]
 
-	p.client = client.NewClient(http.DefaultClient, endpoint, username, password)
+	tlsSkipVerify, _ := strconv.ParseBool(vars[faasNamespace+"tlsSkipVerify"])
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: tlsSkipVerify},
+	}
+	httpClient := &http.Client{Transport: tr}
+
+	p.client = client.NewClient(httpClient, endpoint, username, password)
 
 	return &pbempty.Empty{}, nil
 }
@@ -103,8 +112,8 @@ type function struct {
 	Image        string            `pulumi:"image"`
 	EnvProcess   string            `pulumi:"envProcess,optional"`
 	EnvVars      map[string]string `pulumi:"envVars,optional"`
-	Labels       []string          `pulumi:"labels,optional"`
-	Annotations  []string          `pulumi:"annotations,optional"`
+	Labels       map[string]string `pulumi:"labels,optional"`
+	Annotations  map[string]string `pulumi:"annotations,optional"`
 	Secrets      []string          `pulumi:"secrets,optional"`
 	RegistryAuth string            `pulumi:"registryAuth,optional"`
 }
@@ -260,7 +269,11 @@ func (p *faasProvider) Read(ctx context.Context, req *pulumirpc.ReadRequest) (*p
 		Secrets:      f.Secrets,
 		RegistryAuth: f.RegistryAuth,
 	})
-	if err != nil {
+	switch {
+	case err == client.ErrNotFound:
+		// If the function was not found, return an empty response to indicate that it has been deleted.
+		return &pulumirpc.ReadResponse{}, nil
+	case err != nil:
 		return nil, err
 	}
 
@@ -271,7 +284,7 @@ func (p *faasProvider) Read(ctx context.Context, req *pulumirpc.ReadRequest) (*p
 		return nil, err
 	}
 
-	return &pulumirpc.ReadResponse{Id: f.Service, Properties: outputs}, nil
+	return &pulumirpc.ReadResponse{Id: req.GetId(), Properties: outputs}, nil
 }
 
 // Update updates an existing resource with new values.

@@ -16,6 +16,7 @@ export class Provider extends pulumi.ProviderResource {
             "endpoint": args.endpoint,
             "username": args.username,
             "password": args.password,
+            "tlsSkipVerify": pulumi.output(args.tlsSkipVerify).apply(s => !!s),
         }, opts);
     }
 }
@@ -27,4 +28,5 @@ export interface ProviderArgs {
     readonly endpoint: pulumi.Input<string>;
     readonly username?: pulumi.Input<string>;
     readonly password?: pulumi.Input<string>;
+    readonly tlsSkipVerify?: pulumi.Input<boolean>;
 }
