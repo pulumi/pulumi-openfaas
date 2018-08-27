@@ -239,6 +239,7 @@
     "pkg/resource",
     "pkg/resource/config",
     "pkg/resource/deploy",
+    "pkg/resource/deploy/providers",
     "pkg/resource/graph",
     "pkg/resource/plugin",
     "pkg/resource/provider",
@@ -262,13 +263,19 @@
     "pkg/workspace",
     "sdk/proto/go"
   ]
-  revision = "61324d554059ea96a89460d0ede30eaba4368fb3"
+  revision = "3a26ec382ad642c34bdaf7c7864c5cb1f3b33a6f"
 
 [[projects]]
   branch = "master"
   name = "github.com/reconquest/loreley"
   packages = ["."]
   revision = "2ab6b7470a54bfa9b5b0289f9b4e8fc4839838f7"
+
+[[projects]]
+  name = "github.com/satori/go.uuid"
+  packages = ["."]
+  revision = "f58768cc1a7a7e77a3bd49e98cdd21419399b6a3"
+  version = "v1.2.0"
 
 [[projects]]
   name = "github.com/sergi/go-diff"
@@ -519,6 +526,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "50ee45e374876125b594706d2807bdbbbfe0d0a475fe3409665c782de0dc4169"
+  inputs-digest = "35aa0ad716774fa3392bfb2072c90c3ba93d445bedac450c733d0cb6e647d151"
   solver-name = "gps-cdcl"
   solver-version = 1

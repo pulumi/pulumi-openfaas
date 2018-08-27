@@ -20,8 +20,8 @@ type Function struct {
 	Image        string            `json:"image"`
 	EnvProcess   string            `json:"envProcess"`
 	EnvVars      map[string]string `json:"envVars"`
-	Labels       []string          `json:"labels"`
-	Annotations  []string          `json:"annotations"`
+	Labels       map[string]string `json:"labels"`
+	Annotations  map[string]string `json:"annotations"`
 	Secrets      []string          `json:"secrets"`
 	RegistryAuth string            `json:"registryAuth"`
 }
@@ -32,6 +32,9 @@ type Client struct {
 	baseURL       string
 	authorization string
 }
+
+// ErrNotFound is returned by the client if a resource cannot be found.
+var ErrNotFound = errors.New("not found")
 
 // NewClient creates a new OpenFaaS client with the given HTTP client, base URL, and optional credentials.
 func NewClient(c *http.Client, baseURL, username, password string) *Client {
@@ -58,13 +61,17 @@ func (c *Client) do(ctx context.Context, method, path string, body []byte) (*htt
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != http.StatusOK {
+	switch resp.StatusCode {
+	case http.StatusOK, http.StatusCreated, http.StatusAccepted:
+		return resp, nil
+	case http.StatusNotFound:
+		return nil, ErrNotFound
+	default:
 		defer contract.IgnoreClose(resp.Body)
 		b, err := ioutil.ReadAll(resp.Body)
 		contract.IgnoreError(err)
 		return nil, errors.Errorf("%d response from server (%s)", resp.StatusCode, string(b))
 	}
-	return resp, nil
 }
 
 // CreateFunction creates a new function from the given function specification.
