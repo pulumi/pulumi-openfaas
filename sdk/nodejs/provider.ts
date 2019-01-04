@@ -12,11 +12,11 @@ export class Provider extends pulumi.ProviderResource {
      * @param opts A bag of options that control this resource's behavior.
      */
     constructor(name: string, args: ProviderArgs, opts?: pulumi.ResourceOptions) {
-        super("pulumi:providers:openfaas", name, {
+        super("openfaas", name, {
             "endpoint": args.endpoint,
             "username": args.username,
             "password": args.password,
-            "tlsSkipVerify": pulumi.output(args.tlsSkipVerify).apply(s => !!s),
+            "tlsSkipVerify": args.tlsSkipVerify,
         }, opts);
     }
 }
