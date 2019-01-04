@@ -13,8 +13,6 @@ VERSION         := $(shell scripts/get-version)
 VERSION_FLAGS   := -ldflags "-X github.com/pulumi/pulumi-openfaas/pkg/version.Version=${VERSION}"
 
 GO              ?= go
-GOMETALINTERBIN ?= gometalinter
-GOMETALINTER    :=${GOMETALINTERBIN} --config=Gometalinter.json
 CURL            ?= curl
 
 TESTPARALLELISM := 10
@@ -28,7 +26,7 @@ build::
 	cp README.md LICENSE ${PACKDIR}/nodejs/package.json ${PACKDIR}/nodejs/yarn.lock ${PACKDIR}/nodejs/bin/
 
 lint::
-	$(GOMETALINTER) ./cmd/... ./pkg/... | sort ; exit "$${PIPESTATUS[0]}"
+	golangci-lint run
 
 install::
 	GOBIN=$(PULUMI_BIN) $(GO) install $(VERSION_FLAGS) $(PROJECT)/cmd/$(PROVIDER)
